@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-"""Script that creates the State “California” with the City “San Francisco”
-from the database hbtn_0e_100_usa"""
 
+"""Script that lists all State objects, and corresponding City objects,
+contained in the database hbtn_0e_101_usa"""
 import sys
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -15,9 +15,9 @@ if __name__ == "__main__":
     Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
     session = Session()
-    new_state = State(name='California')
-    new_city = City(name='San Francisco')
-    new_state.cities.append(new_city)
-    session.add(new_state)
-    session.commit()
+    rows = session.query(State).all()
+    for state in rows:
+        print("{}: {}".format(state.id, state.name))
+        for city in state.cities:
+            print("\t{}: {}".format(city.id, city.name))
     session.close()
